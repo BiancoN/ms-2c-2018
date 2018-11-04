@@ -1,25 +1,31 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import _ from 'lodash';
+import Initialization from './steps/Initialization';
 import './App.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      step: 0,
+      n: 1,
+      m: 1,
+      a: [[0]],
+      b: [[0]]
+    };
+  }
+
+  onChange = event => {
+    const { name, value } = event.target;
+    const newState = _.set(this.state, name, value);
+    this.setState(newState);
+  }
+
   render() {
+    const { n, m, a, b } = this.state;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Initialization n={n} m={m} a={a} b={b} onChange={this.onChange} />
       </div>
     );
   }
