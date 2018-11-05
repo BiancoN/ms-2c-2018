@@ -10,9 +10,13 @@ class App extends Component {
       step: 0,
       n: 1,
       m: 1,
-      a: [[0]],
-      b: [[0]]
+      a: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+      b: [[0], [0], [0]]
     };
+  }
+
+  onBuildMatrix = () => {
+
   }
 
   onChange = event => {
@@ -24,9 +28,11 @@ class App extends Component {
   render() {
     const { n, m, a, b } = this.state;
     return (
-      <div className="App">
-        <Initialization n={n} m={m} a={a} b={b} onChange={this.onChange} />
-      </div>
+      <Initialization
+        n={n} m={m} a={a} b={b}
+        onChange={this.onChange}
+        onBuildMatrix={this.onBuildMatrix}
+      />
     );
   }
 }
