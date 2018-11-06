@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import Initialization from './steps/Initialization';
+import Algorithm from './steps/Algorithm';
 import './App.css';
 
 class App extends Component {
@@ -12,7 +13,12 @@ class App extends Component {
       m: 1,
       a: [[0]],
       b: [[0]],
-      x: [['X0']]
+      x: [['X0']],
+      results: {
+        available: false,
+        error: false,
+        errorMessage: 'La matriz no es diagonalmente dominante. Reorganice filas o columnas para lograr esta condicion'
+      }
     };
   }
 
@@ -37,13 +43,16 @@ class App extends Component {
   }
 
   render() {
-    const { n, m, a, b, x } = this.state;
+    const { n, m, a, b, x, results } = this.state;
     return (
-      <Initialization
-        n={n} m={m} a={a} b={b} x={x} 
-        onChange={this.onChange}
-        onBuildMatrix={this.onBuildMatrix}
-      />
+      <div>
+        <Initialization
+          n={n} m={m} a={a} b={b} x={x} 
+          onChange={this.onChange}
+          onBuildMatrix={this.onBuildMatrix}
+        />
+        <Algorithm results={results} />
+      </div>
     );
   }
 }
