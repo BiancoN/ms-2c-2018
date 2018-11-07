@@ -35,7 +35,7 @@ body {
   padding: 0 1em;
 }
 
-.Step h3 {
+.Step h3, .Step .ResultsContainer {
   width: 100%;
 }
 
@@ -120,4 +120,12 @@ body {
   border-radius: 5px;
   color: rgb(200, 0, 0);
   padding: 0.25em;
+}
+
+.Step .ResultsContainer .Table .RowContainer .Input input {
+  width: 7em;
+}
+
+.Step .ResultsContainer .Table .LastRow .Input input {
+  font-weight: 700;
 }

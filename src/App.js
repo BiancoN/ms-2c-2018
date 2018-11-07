@@ -11,11 +11,12 @@ class App extends Component {
       step: 0,
       n: 1,
       m: 1,
-      a: [[0]],
-      b: [[0]],
-      x: [['X0']],
+      a: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+      b: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+      x: [['X0'], ['X1'], ['X2']],
       results: {
-        available: false,
+        available: true,
+        values: [[0.231423123, 0.231423123, 0.231423123], [0, 0, 0], [0, 0, 0]],
         error: false,
         errorMessage: 'La matriz no es diagonalmente dominante. Reorganice filas o columnas para lograr esta condicion'
       }
@@ -51,7 +52,7 @@ class App extends Component {
           onChange={this.onChange}
           onBuildMatrix={this.onBuildMatrix}
         />
-        <Algorithm results={results} />
+        <Algorithm results={results} x={x} />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
+import Table from '../components/Table';
 
-const Algorithm = ({ runJacobiAlgorithm, runGaussSeidelAlgorithm, results }) => (
+const Algorithm = ({ runJacobiAlgorithm, runGaussSeidelAlgorithm, results, x }) => (
   <div className="Step">
     <h3>Seleccione el metodo de resolucion a utilizar:</h3>
     <div className="ButtonsContainer">
@@ -17,6 +18,13 @@ const Algorithm = ({ runJacobiAlgorithm, runGaussSeidelAlgorithm, results }) => 
       <p className="ErrorMessage">
         {results.errorMessage}
       </p>
+    }
+    {
+      results.available &&
+      <div className="ResultsContainer">
+        <h3>Resultados:</h3>
+        <Table values={results.values} x={x} />
+      </div>
     }
   </div>
 );
