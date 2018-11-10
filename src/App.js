@@ -39,7 +39,8 @@ class App extends Component {
   }
 
   analyzeMatrix = () => {
-    let { n, a, matrix_analysis} = this.state;
+    let { n, a} = this.state;
+    let count = 0;
     for ( let i = 0; i < n; i++) {         
       let sum = 0; 
       for ( let j = 0; j < n; j++){              
@@ -47,13 +48,17 @@ class App extends Component {
       }
       sum -= Math.abs(a[i][i]); 
       if (Math.abs(a[i][i]) < sum){
-        matrix_analysis = 'nothing';
-        this.setState({matrix_analysis});
+        this.setState({matrix_analysis: 'nothing'});
         return false;  
       }
+      if (Math.abs(a[i][i]) > sum)
+        count += 1;
     } 
-    matrix_analysis = 'dominant';
-    this.setState({matrix_analysis});
+    if(count == n){
+      this.setState({matrix_analysis: 'strict'});
+    }else{
+      this.setState({matrix_analysis: 'dominant'});
+    }
     return true; 
   }
 
@@ -61,6 +66,7 @@ class App extends Component {
     const { name, value } = event.target;
     const newState = _.set(this.state, name, value);
     this.setState(newState);
+    this.setState({matrix_analysis: ''});
   }
 
   render() {
@@ -73,7 +79,7 @@ class App extends Component {
           onBuildMatrix={this.onBuildMatrix}
           analyzeMatrix={this.analyzeMatrix}
         />
-        <Algorithm results={results} x={x} />
+        { (matrix_analysis == 'dominant' || matrix_analysis == 'strict') ? <Algorithm results={results} x={x} /> : null}
       </div>
     );
   }

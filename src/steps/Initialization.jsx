@@ -23,15 +23,15 @@ const Initilization = ({ n, m, a, b, x, onChange, onBuildMatrix, analyzeMatrix, 
       <Matrix values={x} editable={false} type="text" />
       <p>=</p>
       <Matrix name="b" values={b} onChange={onChange} />
-    </div>
-    <div className="DimentionsContainer">
+   
       <div className="ButtonContainer" onClick={analyzeMatrix}>
         <p>Analizar</p>
       </div>
     </div>
 
-    {matrix_analysis == 'nothing' && <h4> La matriz no es diagonalmente dominante. Reorganice filas o columnas para lograr esta condicion </h4> }
-    {matrix_analysis == 'dominant' &&  <h4> La matriz es diagonalmente dominante. </h4> }
+    {matrix_analysis == 'nothing' ? <h4> La matriz no es diagonalmente dominante. Reorganice filas o columnas para lograr esta condicion </h4> : null}
+    {matrix_analysis == 'dominant' ?  <h4> La matriz es dominante diagonalmente. </h4> : null}
+    {matrix_analysis == 'strict' ?  <h4> La matriz es estrictamente dominante diagonalmente . </h4> : null}
 
     <div className="SimpleLine" />
   </div>
