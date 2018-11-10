@@ -8,6 +8,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      matrix_analysis: '',
       step: 0,
       n: 1,
       m: 1,
@@ -37,6 +38,25 @@ class App extends Component {
     this.setState({ a, b, x });
   }
 
+  analyzeMatrix = () => {
+    let { n, a, matrix_analysis} = this.state;
+    for ( let i = 0; i < n; i++) {         
+      let sum = 0; 
+      for ( let j = 0; j < n; j++){              
+        sum += Math.abs(a[i][j]);         
+      }
+      sum -= Math.abs(a[i][i]); 
+      if (Math.abs(a[i][i]) < sum){
+        matrix_analysis = 'nothing';
+        this.setState({matrix_analysis});
+        return false;  
+      }
+    } 
+    matrix_analysis = 'dominant';
+    this.setState({matrix_analysis});
+    return true; 
+  }
+
   onChange = event => {
     const { name, value } = event.target;
     const newState = _.set(this.state, name, value);
@@ -44,13 +64,14 @@ class App extends Component {
   }
 
   render() {
-    const { n, m, a, b, x, results } = this.state;
+    const { n, m, a, b, x, results, matrix_analysis } = this.state;
     return (
       <div>
         <Initialization
-          n={n} m={m} a={a} b={b} x={x} 
+          n={n} m={m} a={a} b={b} x={x} matrix_analysis={matrix_analysis}
           onChange={this.onChange}
           onBuildMatrix={this.onBuildMatrix}
+          analyzeMatrix={this.analyzeMatrix}
         />
         <Algorithm results={results} x={x} />
       </div>
