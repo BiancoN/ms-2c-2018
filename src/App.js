@@ -37,8 +37,8 @@ class App extends Component {
     this.setState({ a, b, x, results: {} });
   }
 
-  onAnalyze = (isDiagonallyDominant, message) => {
-    const results = { isDiagonallyDominant, message };
+  onAnalyze = (isDiagonallyDominant, message, norms) => {
+    const results = { isDiagonallyDominant, message, norms };
     this.setState({ results });
   }
 
@@ -59,7 +59,8 @@ class App extends Component {
           onBuildMatrix={this.onBuildMatrix}
         />
         <Analysis
-          a={a} message={results.message}
+          norms={results.norms} a={a}
+          message={results.message}
           onAnalyze={this.onAnalyze}
         />
         {results.isDiagonallyDominant ? <Algorithm results={results} x={x} />: null}

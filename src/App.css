@@ -157,3 +157,12 @@ body {
 .Step .AnalysisContainer h4 {
   margin: 0 1.5em;
 }
+
+.Step .NormsContainer {
+  width: 100%;
+  display: flex;
+}
+
+.Step .NormsContainer p {
+  margin: 1em 1.5em 0 0;
+}
