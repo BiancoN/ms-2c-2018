@@ -55,6 +55,7 @@ body {
   margin: 0;
 }
 
+.Step .AnalysisContainer .ButtonContainer,
 .Step .DimentionsContainer .ButtonContainer {
   display: flex;
   align-items: center;
@@ -64,6 +65,7 @@ body {
   cursor: pointer;
 }
 
+.Step .AnalysisContainer .ButtonContainer p,
 .Step .DimentionsContainer .ButtonContainer p {
   margin: 0;
   padding: 0em 0.5em;
@@ -143,4 +145,15 @@ body {
 
 .Step .ResultsContainer .Table .LastRow .Input input {
   font-weight: 700;
+}
+
+.Step .AnalysisContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.Step .AnalysisContainer h4 {
+  margin: 0 1.5em;
 }
