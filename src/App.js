@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import Initialization from './steps/Initialization';
+import Analysis from './steps/Analysis';
 import Algorithm from './steps/Algorithm';
 import './App.css';
 
@@ -8,8 +9,6 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      matrix_analysis: '',
-      step: 0,
       n: 1,
       m: 1,
       initialVector: [[0]],
@@ -17,10 +16,10 @@ class App extends Component {
       b: [[0]],
       x: [['X0']],
       results: {
+        isDiagonallyDominant: false,
+        message: '',
         available: true,
-        values: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
-        error: false,
-        errorMessage: 'La matriz no es diagonalmente dominante. Reorganice filas o columnas para lograr esta condicion'
+        values: [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
       }
     };
   }
@@ -29,46 +28,27 @@ class App extends Component {
     const { n, m } = this.state;
     let a = [], b = [], x = [], initialVector = [[]], i, j;
     for (i = 0; i < n; i++) {
-      a[i] = [ ];
       b[i] = [0];
+      a[i] = [ ];
       initialVector[0][i] = [0];
-      x[i] = [`X${i}`];
       for (j = 0; j < m; j++) {
         a[i][j] = 0;
+        if (i === 0) x[j] = [`X${j}`];
       }
     }
-    this.setState({ a, b, x, initialVector});
+    this.setState({ a, b, x, results: {}, initialVector});
   }
-  
-  analyzeMatrix = () => {
-    let { n, a} = this.state;
-    let count = 0, i, j;
-    for (i = 0; i < n; i++) {         
-      let sum = 0; 
-      for (j = 0; j < n; j++){              
-        sum += Math.abs(a[i][j]);         
-      }
-      sum -= Math.abs(a[i][i]); 
-      if (Math.abs(a[i][i]) < sum){
-        this.setState({matrix_analysis: 'nothing'});
-        return false;  
-      }
-      if (Math.abs(a[i][i]) > sum)
-        count += 1;
-    } 
-    if(count == n){
-      this.setState({matrix_analysis: 'strict'});
-    }else{
-      this.setState({matrix_analysis: 'dominant'});
-    }
-    return true; 
+
+  onAnalyze = (isDiagonallyDominant, message, norms) => {
+    const results = { isDiagonallyDominant, message, norms };
+    this.setState({ results });
   }
 
   onChange = event => {
     const { name, value } = event.target;
     const newState = _.set(this.state, name, value);
+    if (name.includes('a')) newState.results = {};
     this.setState(newState);
-    this.setState({matrix_analysis: ''});
   }
 
   onChangeInitialVector = event => {
@@ -130,21 +110,26 @@ class App extends Component {
   }
 
   render() {
-    const { n, m, initialVector, a, b, x, results, matrix_analysis } = this.state;
+    const { n, m, a, b, x, results, initialVector } = this.state;
     return (
       <div>
         <Initialization
-          n={n} m={m} a={a} b={b} x={x} matrix_analysis={matrix_analysis}
+          n={n} m={m} a={a} b={b} x={x}
           onChange={this.onChange}
           onBuildMatrix={this.onBuildMatrix}
-          analyzeMatrix={this.analyzeMatrix}
-          />
-        { (matrix_analysis == 'dominant' || matrix_analysis == 'strict') ? 
-          <Algorithm 
-          results={results} x={x} initialVector={initialVector} 
-          runJacobiAlgorithm={this.runJacobiAlgorithm} 
-          onChangeInitialVector={this.onChangeInitialVector}
-          /> :null
+        />
+        <Analysis
+          norms={results.norms} a={a}
+          message={results.message}
+          onAnalyze={this.onAnalyze}
+        />
+        {
+          results.isDiagonallyDominant ?
+          <Algorithm
+            results={results} x={x} initialVector={initialVector}
+            runJacobiAlgorithm={this.runJacobiAlgorithm}
+            onChangeInitialVector={this.onChangeInitialVector}
+          /> : null
         }
       </div>
     );
