@@ -12,12 +12,13 @@ class App extends Component {
       step: 0,
       n: 1,
       m: 1,
+      initialVector: [[0]],
       a: [[0]],
       b: [[0]],
       x: [['X0']],
       results: {
         available: true,
-        values: [[0.231423123, 0.231423123, 0.231423123], [0, 0, 0], [0, 0, 0]],
+        values: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
         error: false,
         errorMessage: 'La matriz no es diagonalmente dominante. Reorganice filas o columnas para lograr esta condicion'
       }
@@ -26,24 +27,25 @@ class App extends Component {
 
   onBuildMatrix = () => {
     const { n, m } = this.state;
-    let a = [], b = [], x = [], i, j;
+    let a = [], b = [], x = [], initialVector = [[]], i, j;
     for (i = 0; i < n; i++) {
       a[i] = [ ];
       b[i] = [0];
+      initialVector[0][i] = [0];
       x[i] = [`X${i}`];
       for (j = 0; j < m; j++) {
         a[i][j] = 0;
       }
     }
-    this.setState({ a, b, x });
+    this.setState({ a, b, x, initialVector});
   }
-
+  
   analyzeMatrix = () => {
     let { n, a} = this.state;
-    let count = 0;
-    for ( let i = 0; i < n; i++) {         
+    let count = 0, i, j;
+    for (i = 0; i < n; i++) {         
       let sum = 0; 
-      for ( let j = 0; j < n; j++){              
+      for (j = 0; j < n; j++){              
         sum += Math.abs(a[i][j]);         
       }
       sum -= Math.abs(a[i][i]); 
@@ -69,8 +71,37 @@ class App extends Component {
     this.setState({matrix_analysis: ''});
   }
 
+  onChangeInitialVector = event => {
+    const { name, value } = event.target;
+    const newState = _.set(this.state, name, value);
+    this.setState(newState);
+  }
+
   runJacobiAlgorithm = () => {
-    debugger;
+    let { n, m, a, b, initialVector} = this.state;
+    let sol = initialVector[0], soltem = [m];
+    let c, iteraciones, i, j, suma;
+    // Add matrix b like a column in matrix a
+    for (c = 0; c < n; c++) {
+      a[c][m] = b[c][0]
+    }
+    for (iteraciones = 0; iteraciones < 3; iteraciones++){
+      for (i = 0; i < n; i++) {
+          suma = 0;
+          for (j = 0; j < m - 1; j++) {
+            if (j == i) continue;
+            suma += a[i][j] * sol[j];
+          }
+          soltem[i] = (a[i][m - 1] - suma) / a[i][i];
+      }
+      for (i = 0; i < n; i++){
+        sol[i] = soltem[i];
+        console.log("X" + (i + 1) + " = " + sol[i]);
+      }
+    }
+    return;
+
+    // Function in c#
     // public string Jacobi(double[,] matriz, int filas, int columnas){
     //     double[] sol = new double[filas];
     //     double[] soltem = new double[filas];
@@ -89,7 +120,7 @@ class App extends Component {
     //         }
     //         for (int i = 0; i < filas; i++)
     //         {
-    //             sol[i] = soltem[i];
+    //             su[i] = soltem[i];
     //             sb.AppendLine("X" + (i + 1) + " = " + sol[i]);
     //         }
     //         sb.AppendLine();
@@ -99,7 +130,7 @@ class App extends Component {
   }
 
   render() {
-    const { n, m, a, b, x, results, matrix_analysis } = this.state;
+    const { n, m, initialVector, a, b, x, results, matrix_analysis } = this.state;
     return (
       <div>
         <Initialization
@@ -107,9 +138,13 @@ class App extends Component {
           onChange={this.onChange}
           onBuildMatrix={this.onBuildMatrix}
           analyzeMatrix={this.analyzeMatrix}
-        />
+          />
         { (matrix_analysis == 'dominant' || matrix_analysis == 'strict') ? 
-          <Algorithm  results={results} x={x} runJacobiAlgorithm={this.runJacobiAlgorithm} /> :null
+          <Algorithm 
+          results={results} x={x} initialVector={initialVector} 
+          runJacobiAlgorithm={this.runJacobiAlgorithm} 
+          onChangeInitialVector={this.onChangeInitialVector}
+          /> :null
         }
       </div>
     );

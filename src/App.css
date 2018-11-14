@@ -27,6 +27,23 @@ body {
   background-color: #282c34;
 }
 
+.TextCenter{
+  text-align: center;
+}
+
+.Underline{
+  text-decoration: underline;
+}
+
+.MarginVertical{
+  margin: 1em 0;
+}
+
+.Box{
+  border: 1px solid;
+  padding: 0.5em;
+}
+
 .Step {
   color: white;
   display: flex;
@@ -35,7 +52,7 @@ body {
   padding: 0 1em;
 }
 
-.Step h3, .Step .ResultsContainer {
+.Step h3, .Step span, .Step .ResultsContainer {
   width: 100%;
 }
 
