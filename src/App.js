@@ -49,6 +49,35 @@ class App extends Component {
     this.setState(newState);
   }
 
+  runJacobiAlgorithm = () => {
+    debugger;
+    // public string Jacobi(double[,] matriz, int filas, int columnas){
+    //     double[] sol = new double[filas];
+    //     double[] soltem = new double[filas];
+    //     StringBuilder sb = new StringBuilder();
+    //     for (int iteraciones = 0; iteraciones < 3; iteraciones++)
+    //     {
+    //         for (int i = 0; i < filas; i++)
+    //         {
+    //             double suma = 0;
+    //             for (int j = 0; j < columnas - 1; j++)
+    //             {
+    //                 if (j == i) continue;
+    //                 suma += matriz[i, j] * sol[j];
+    //             }
+    //             soltem[i] = (matriz[i, columnas - 1] - suma) / matriz[i, i];
+    //         }
+    //         for (int i = 0; i < filas; i++)
+    //         {
+    //             sol[i] = soltem[i];
+    //             sb.AppendLine("X" + (i + 1) + " = " + sol[i]);
+    //         }
+    //         sb.AppendLine();
+    //     }
+    //     return sb.ToString();
+    // }
+  }
+
   render() {
     const { n, m, a, b, x, results } = this.state;
     return (
@@ -63,7 +92,13 @@ class App extends Component {
           message={results.message}
           onAnalyze={this.onAnalyze}
         />
-        {results.isDiagonallyDominant ? <Algorithm results={results} x={x} />: null}
+        {
+          results.isDiagonallyDominant ?
+          <Algorithm
+            results={results} x={x}
+            runJacobiAlgorithm={this.runJacobiAlgorithm}
+          /> : null
+        }
       </div>
     );
   }
