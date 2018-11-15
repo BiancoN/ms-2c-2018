@@ -52,7 +52,8 @@ body {
   padding: 0 1em;
 }
 
-.Step h3, .Step span, .Step .ResultsContainer {
+/* .Step h3, .Step span, .Step .ResultsContainer { */
+.Step h3, .Step .ResultsContainer {
   width: 100%;
 }
 
@@ -182,4 +183,14 @@ body {
 
 .Step .NormsContainer p {
   margin: 1em 1.5em 0 0;
+}
+
+.IsActive{
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+  color: #fff;
+}
+
+.AlignStart{
+  align-self: start;
 }

@@ -15,6 +15,9 @@ class App extends Component {
       a: [[0]],
       b: [[0]],
       x: [['X0']],
+      method: '',
+      errorDimension: 1,
+      decimalAmount: 1,
       results: {
         isDiagonallyDominant: false,
         message: '',
@@ -26,7 +29,8 @@ class App extends Component {
 
   onBuildMatrix = () => {
     const { n, m } = this.state;
-    let a = [], b = [], x = [], initialVector = [[]], i, j;
+    let a = [], b = [], x = [], initialVector = [[]], i, j, method;
+    method = '';
     for (i = 0; i < n; i++) {
       b[i] = [0];
       a[i] = [ ];
@@ -36,7 +40,7 @@ class App extends Component {
         if (i === 0) x[j] = [`X${j}`];
       }
     }
-    this.setState({ a, b, x, results: {}, initialVector});
+    this.setState({ a, b, x, method, results: {}, initialVector});
   }
 
   onAnalyze = (isDiagonallyDominant, message, norms) => {
@@ -57,10 +61,22 @@ class App extends Component {
     this.setState(newState);
   }
 
+  selectMethod = event => {
+    const newState = _.set(this.state, 'method', event);
+    this.setState(newState);
+  }
+
+  resolveMatrix = () => {
+   let { method} = this.state;
+   if(method === 'jacobi'){
+    this.runJacobiAlgorithm();
+   }
+  }
+
   runJacobiAlgorithm = () => {
-    let { n, m, a, b, initialVector} = this.state;
-    let sol = initialVector[0], soltem = [m];
-    let c, iteraciones, i, j, suma;
+    let { n, m, a, b, initialVector, results } = this.state;
+    let sol = initialVector[0].slice();
+    let c, iteraciones, i, j, suma, soltem = [m];
     // Add matrix b like a column in matrix a
     for (c = 0; c < n; c++) {
       a[c][m] = b[c][0]
@@ -68,53 +84,29 @@ class App extends Component {
     for (iteraciones = 0; iteraciones < 3; iteraciones++){
       for (i = 0; i < n; i++) {
           suma = 0;
-          for (j = 0; j < m - 1; j++) {
-            if (j == i) continue;
+          for (j = 0; j < m ; j++) {
+            if (j === i) continue;
             suma += a[i][j] * sol[j];
           }
-          soltem[i] = (a[i][m - 1] - suma) / a[i][i];
+          soltem[i] = (a[i][m] - suma) / a[i][i];
       }
       for (i = 0; i < n; i++){
         sol[i] = soltem[i];
-        console.log("X" + (i + 1) + " = " + sol[i]);
       }
     }
+    results.values = sol;
+    results.available = true;
+    const newState = _.set(this.state, 'results', results);
+    this.setState(newState); 
     return;
-
-    // Function in c#
-    // public string Jacobi(double[,] matriz, int filas, int columnas){
-    //     double[] sol = new double[filas];
-    //     double[] soltem = new double[filas];
-    //     StringBuilder sb = new StringBuilder();
-    //     for (int iteraciones = 0; iteraciones < 3; iteraciones++)
-    //     {
-    //         for (int i = 0; i < filas; i++)
-    //         {
-    //             double suma = 0;
-    //             for (int j = 0; j < columnas - 1; j++)
-    //             {
-    //                 if (j == i) continue;
-    //                 suma += matriz[i, j] * sol[j];
-    //             }
-    //             soltem[i] = (matriz[i, columnas - 1] - suma) / matriz[i, i];
-    //         }
-    //         for (int i = 0; i < filas; i++)
-    //         {
-    //             su[i] = soltem[i];
-    //             sb.AppendLine("X" + (i + 1) + " = " + sol[i]);
-    //         }
-    //         sb.AppendLine();
-    //     }
-    //     return sb.ToString();
-    // }
   }
 
   render() {
-    const { n, m, a, b, x, results, initialVector } = this.state;
+    const { n, m, a, b, x, method, errorDimension, decimalAmount, results, initialVector } = this.state;
     return (
       <div>
         <Initialization
-          n={n} m={m} a={a} b={b} x={x}
+          n={n} m={m} a={a} b={b} x={x} method={method}
           onChange={this.onChange}
           onBuildMatrix={this.onBuildMatrix}
         />
@@ -126,9 +118,10 @@ class App extends Component {
         {
           results.isDiagonallyDominant ?
           <Algorithm
-            results={results} x={x} initialVector={initialVector}
-            runJacobiAlgorithm={this.runJacobiAlgorithm}
+            results={results} x={x} initialVector={initialVector} method={method} decimalAmount={decimalAmount} errorDimension={errorDimension}
+            resolveMatrix={this.resolveMatrix}
             onChangeInitialVector={this.onChangeInitialVector}
+            selectMethod={this.selectMethod}
           /> : null
         }
       </div>
