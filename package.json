@@ -6,6 +6,8 @@
   "homepage": "./",
   "dependencies": {
     "lodash": "4.17.11",
+    "mathjs": "5.2.3",
+    "numeric": "1.2.6",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-scripts": "2.1.0"

@@ -1,11 +1,46 @@
 import React from 'react';
+import math from 'mathjs';
+import numeric from 'numeric';
+math.import(numeric, { wrap: true, silent: true });
+
+const transpone = matrix => {
+  const n = matrix.length, m = matrix[0].length;
+  const transposed = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (transposed.length < m) {
+        transposed[j] = [matrix[i][j]];
+      } else {
+        transposed[j][i] = matrix[i][j];
+      }
+    }
+  }
+  return transposed;
+};
+
+const calculateTargetMatrix = a => a.map(aRow => a.map(bColumn =>
+  aRow.reduce((accum, value, index) => accum + (value * bColumn[index]), 0)));
+
+const eigenValues = matrix => {
+  if (matrix.length === 1) return matrix[0];
+  const matrixStr = matrix.reduce((accum, row, index) =>
+    accum.concat(row.reduce((rowAccum, value, columnIndex) =>
+      rowAccum.concat(
+        value,
+        row.length - 1 === columnIndex ? '' : ','
+      ), ''),
+      index === matrix.length - 1 ? ']' : ';'
+    ), '[');
+  return math.eval(`eig(${matrixStr})`);
+};
 
 const calculateNorms = matrix => {
   const norm1 = Math.max(...matrix.reduce(
     (accum, row) => row.map(
       (value, index) => Math.abs(value) + (accum[index] || 0)), []));
 
-  const norm2 = 0;
+  const norm2 =
+    Math.sqrt(Math.max(eigenValues(calculateTargetMatrix(transpone(matrix)))));
 
   const normInf = Math.max(...matrix.map(
     row => row.reduce((accum, value) => accum + Math.abs(value), 0)));
