@@ -41,7 +41,7 @@ const analyzeMatrix = (a, onAnalyze) => {
 
 const Analysis = ({ a, onAnalyze, message, norms }) => (
   <div className="Step">
-    <span className="MarginVertical">Para aplicar algun método es necesario que la matriz de coeficientes sea analizada.</span>
+    <span className="MarginVertical AlignStart">Para aplicar algun método es necesario que la matriz de coeficientes sea analizada.</span>
     <div className="AnalysisContainer">
       <div className="ButtonContainer" onClick={() => analyzeMatrix(a, onAnalyze)}>
         <p>Analizar</p>

@@ -3,7 +3,7 @@ import Table from '../components/Table';
 import Matrix from '../components/Matrix';
 import Input from '../components/Input';
 
-const Algorithm = ({ selectMethod, runJacobiAlgorithm, runGaussSeidelAlgorithm, results, x, method, initialVector, onChangeInitialVector, decimalAmount, errorDimension }) => (
+const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVector, onChangeInitialVector, decimalAmount, errorDimension }) => (
   <div className="Step">
     <h3 className="TextCenter Underline">Método de resolución </h3>
     <span className="MarginVertical AlignStart">Seleccione el método de resolución a utilizar:</span>
@@ -29,6 +29,12 @@ const Algorithm = ({ selectMethod, runJacobiAlgorithm, runGaussSeidelAlgorithm, 
         <div className="MatrixesContainer">
           <span className="MarginVertical">Indique la cota de error:</span>
           <Input name="errorDimension" value={errorDimension} /> 
+        </div>
+
+        <div className="ButtonsContainer">
+          <div className="Button" onClick={resolveMatrix}>
+            <p>Resolver</p>
+          </div>
         </div>
       </div>
     }
