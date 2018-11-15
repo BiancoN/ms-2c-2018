@@ -15,6 +15,9 @@ class App extends Component {
       a: [[0]],
       b: [[0]],
       x: [['X0']],
+      method: '',
+      errorDimension: 1,
+      decimalAmount: 1,
       results: {
         isDiagonallyDominant: false,
         message: '',
@@ -26,7 +29,8 @@ class App extends Component {
 
   onBuildMatrix = () => {
     const { n, m } = this.state;
-    let a = [], b = [], x = [], initialVector = [[]], i, j;
+    let a = [], b = [], x = [], initialVector = [[]], i, j, method;
+    method = '';
     for (i = 0; i < n; i++) {
       b[i] = [0];
       a[i] = [ ];
@@ -36,7 +40,7 @@ class App extends Component {
         if (i === 0) x[j] = [`X${j}`];
       }
     }
-    this.setState({ a, b, x, results: {}, initialVector});
+    this.setState({ a, b, x, method, results: {}, initialVector});
   }
 
   onAnalyze = (isDiagonallyDominant, message, norms) => {
@@ -54,6 +58,11 @@ class App extends Component {
   onChangeInitialVector = event => {
     const { name, value } = event.target;
     const newState = _.set(this.state, name, value);
+    this.setState(newState);
+  }
+
+  selectMethod = event => {
+    const newState = _.set(this.state, 'method', event);
     this.setState(newState);
   }
 
@@ -110,11 +119,11 @@ class App extends Component {
   }
 
   render() {
-    const { n, m, a, b, x, results, initialVector } = this.state;
+    const { n, m, a, b, x, method, errorDimension, decimalAmount, results, initialVector } = this.state;
     return (
       <div>
         <Initialization
-          n={n} m={m} a={a} b={b} x={x}
+          n={n} m={m} a={a} b={b} x={x} method={method}
           onChange={this.onChange}
           onBuildMatrix={this.onBuildMatrix}
         />
@@ -126,9 +135,10 @@ class App extends Component {
         {
           results.isDiagonallyDominant ?
           <Algorithm
-            results={results} x={x} initialVector={initialVector}
+            results={results} x={x} initialVector={initialVector} method={method} decimalAmount={decimalAmount} errorDimension={errorDimension}
             runJacobiAlgorithm={this.runJacobiAlgorithm}
             onChangeInitialVector={this.onChangeInitialVector}
+            selectMethod={this.selectMethod}
           /> : null
         }
       </div>
