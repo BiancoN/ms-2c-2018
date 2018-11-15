@@ -31,7 +31,7 @@ const eigenValues = matrix => {
       ), ''),
       index === matrix.length - 1 ? ']' : ';'
     ), '[');
-  return math.eval(`eig(${matrixStr})`);
+  return math.eval(`eig(${matrixStr})`).lambda.x;
 };
 
 const calculateNorms = matrix => {
@@ -40,7 +40,7 @@ const calculateNorms = matrix => {
       (value, index) => Math.abs(value) + (accum[index] || 0)), []));
 
   const norm2 =
-    Math.sqrt(Math.max(eigenValues(calculateTargetMatrix(transpone(matrix)))));
+    Math.sqrt(Math.max(...eigenValues(calculateTargetMatrix(transpone(matrix)))));
 
   const normInf = Math.max(...matrix.map(
     row => row.reduce((accum, value) => accum + Math.abs(value), 0)));
