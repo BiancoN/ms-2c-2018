@@ -68,7 +68,7 @@ class App extends Component {
 
   resolveMatrix = () => {
    let { method} = this.state;
-   if(method == 'jacobi'){
+   if(method === 'jacobi'){
     this.runJacobiAlgorithm();
    }
   }
@@ -85,7 +85,7 @@ class App extends Component {
       for (i = 0; i < n; i++) {
           suma = 0;
           for (j = 0; j < m ; j++) {
-            if (j == i) continue;
+            if (j === i) continue;
             suma += a[i][j] * sol[j];
           }
           soltem[i] = (a[i][m] - suma) / a[i][i];

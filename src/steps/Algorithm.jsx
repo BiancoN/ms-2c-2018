@@ -8,10 +8,10 @@ const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVec
     <h3 className="TextCenter Underline">Método de resolución </h3>
     <span className="MarginVertical AlignStart">Seleccione el método de resolución a utilizar:</span>
     <div className="ButtonsContainer">
-      <div className={`Button ${method=='jacobi'? 'IsActive':''}`} onClick={()=>selectMethod('jacobi')}>
+      <div className={`Button ${method==='jacobi'? 'IsActive':''}`} onClick={()=>selectMethod('jacobi')}>
         <p>Jacobi</p>
       </div>
-      <div className={`Button ${method=='gauss-seidel'?'IsActive':''}`} onClick={()=>selectMethod('gauss-seidel')}>
+      <div className={`Button ${method==='gauss-seidel'?'IsActive':''}`} onClick={()=>selectMethod('gauss-seidel')}>
         <p>Gauss-Seidel</p>
       </div>
     </div>
@@ -24,11 +24,11 @@ const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVec
         </div>
         <div className="MatrixesContainer">
           <span className="MarginVertical">Indique la cantidad de decimales:</span>
-          <Input name="decimalAmount"  value={decimalAmount} />
+          <Input name="decimalAmount"  values={decimalAmount} />
         </div>
         <div className="MatrixesContainer">
           <span className="MarginVertical">Indique la cota de error:</span>
-          <Input name="errorDimension" value={errorDimension} /> 
+          <Input name="errorDimension" values={errorDimension} /> 
         </div>
 
         <div className="ButtonsContainer">
