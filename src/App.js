@@ -74,49 +74,52 @@ class App extends Component {
     this.runJacobiAlgorithm();
    }
    if(method === 'gauss-seidel'){
-     this.runGaussSeiden();
+     this.runGaussSeidel();
    }
   }
 
   runJacobiAlgorithm = () => {
     let { n, m, a, b, initialVector, results, decimalAmount, errorDimension } = this.state;
-    let sol = initialVector[0].slice();
-    let c, i, j, suma, soltem = [m], aux = [m];
+    let sol = [], k = 0, c, i, j, suma, soltem = [m], aux = [m], matrixA = [];
     var condition = true;
-    // Add matrix b like a column in matrix a
+    let matrizNormaInf = [[Math.max.apply(null, initialVector[0].map(v => parseInt(v, 10)))]];
+    sol.push(initialVector[0].map(v => parseInt(v, 10)));
+
     for (c = 0; c < n; c++) {
-      a[c][m] = b[c][0]
+      matrixA.push(a[c].map(v => parseInt(v, 10)));
+      matrixA[c][m] = b[c][0]
     }
-   
 	  while(condition){
       for (i = 0; i < n; i++) {
-          suma = 0;
-          for (j = 0; j < m ; j++) {
-            if (j === i) continue;
-            suma += a[i][j] * sol[j];
-          }
-          soltem[i] = (a[i][m] - suma) / a[i][i];
-		  aux[i] = soltem[i] -sol[i];
+        suma = 0;
+        for (j = 0; j < m ; j++) {
+          if (j === i) continue;
+          suma += matrixA[i][j] * sol[k][j];
+        }
+        soltem[i] = (matrixA[i][m] - suma) / matrixA[i][i];
+		    aux[i] = soltem[i] - sol[k][i];
       }
       var normInf = Math.max(...aux.map(value => Math.abs(value)));
+      matrizNormaInf.push([normInf]);
       if(isNaN(normInf))
         break;
-      console.log('Norma infinito:' + normInf);
-      if(normInf < errorDimension){ 
+      if(normInf < errorDimension )
         condition = false;
-      }
+      sol.push([]);
+      k++;
       for (i = 0; i < n; i++){
-        sol[i] = soltem[i].toFixed(decimalAmount);//Set decimals
+        sol[k][i] = soltem[i].toFixed(decimalAmount);
       }
     }
     results.values = sol;
     results.available = true;
+    results.errorValues = matrizNormaInf;
     const newState = _.set(this.state, 'results', results);
     this.setState(newState); 
     return;
   }
 
-  runGaussSeiden = () => {
+  runGaussSeidel = () => {
     let { n, m, initialVector, a, b, errorDimension, decimalAmount, results } = this.state;
     let k = 0;
     let i;
