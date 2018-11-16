@@ -203,3 +203,7 @@ body {
   align-self: start;
 }
 
+.ResultsNorma {
+  display:inline-block;
+}
+

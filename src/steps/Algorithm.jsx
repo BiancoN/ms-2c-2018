@@ -49,8 +49,13 @@ const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVec
     {
       results.available &&
       <div className="ResultsContainer">
+        <div className="ResultsNorma">
         <h3>Resultados:</h3>
         <Table values={results.values} x={x} />
+        </div>
+        <div className="ResultsNorma">
+        <Table name="NormaInf" values={results.errorValues} x={results.xE} />
+        </div>
       </div>
     }
   </div>

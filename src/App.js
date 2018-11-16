@@ -22,7 +22,9 @@ class App extends Component {
         isDiagonallyDominant: false,
         message: '',
         available: true,
-        values: [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        values: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+        xE:[['NormaInf']],
+        errorValues:[[]]
       }
     };
   }
@@ -127,6 +129,7 @@ class App extends Component {
         vector.push(0);
     }
     let matrizNorma = [];
+    let matrizNormaInf = [[Math.max.apply(null, initialVector[0].map(v => parseInt(v, 10)))]];
     matrizNorma.push(vector);
     do{
         k++;
@@ -155,8 +158,10 @@ class App extends Component {
         for(j = 0; j < m; j++){
           matrizNorma[k][j] = Math.abs(matrizRes[k][j] - matrizRes[k - 1][j]);    
         }
+        matrizNormaInf.push([Math.max.apply(null, matrizNorma[k])]);
     }while(Math.max.apply(null, matrizNorma[k]) >= errorDimension);
     results.values = matrizRes;
+    results.errorValues = matrizNormaInf;
     results.available = true;
     const newState = _.set(this.state, 'results', results);
     this.setState(newState); 
