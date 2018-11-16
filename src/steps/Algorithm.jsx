@@ -31,7 +31,7 @@ const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVec
           <Input name="errorDimension" value={errorDimension} onChange={onChange} /> 
         </div>
 
-        <div className="ButtonsContainer">
+        <div className="ButtonsContainer ContentCenter">
           <div className="Button" onClick={resolveMatrix}>
             <p>Resolver</p>
           </div>

@@ -39,8 +39,21 @@ const calculateNorms = matrix => {
     (accum, row) => row.map(
       (value, index) => Math.abs(value) + (accum[index] || 0)), []));
 
-  const norm2 =
-    Math.sqrt(Math.max(...eigenValues(calculateTargetMatrix(transpone(matrix)))));
+  let allZero = true;
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
+      if(matrix[i][j] !== 0) {
+        allZero = false;
+        break;
+      }
+    }
+  } 
+
+  let a = 0;
+  if(!allZero){
+    a = Math.sqrt(Math.max(...eigenValues(calculateTargetMatrix(transpone(matrix)))));
+  }
+  const norm2 = a;
 
   const normInf = Math.max(...matrix.map(
     row => row.reduce((accum, value) => accum + Math.abs(value), 0)));
@@ -53,9 +66,21 @@ const analyzeMatrix = (a, onAnalyze) => {
   const n = a.length, m = a[0].length;
   let result = 'La matriz es estrictamente dominante diagonalmente';
   let canCalculate = false;
-  if (n !== m) result = 'La matriz de coeficientes debe ser cuadrada';
-  else {
+  if (n !== m){
+    result = 'La matriz de coeficientes debe ser cuadrada';
+  }
+  else if(n === m) {
     canCalculate = true;
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < m; j++) {
+        if(i === j && a[i][j] === 0){
+          result = 'La matriz no puede tener ceros en su diagonal.';
+          canCalculate = false;
+          break;
+        }
+      }
+    }
+  } else  {
     for (let i = 0; i < n; i++) {
       const { diagonal, sum } = a[i].reduce((accum, value, j) => {
         if (i === j) accum.diagonal = Math.abs(value);
@@ -63,9 +88,9 @@ const analyzeMatrix = (a, onAnalyze) => {
         return accum;
       }, { diagonal: 0, sum: 0 });
       if (diagonal === sum) {
-        result = 'La matriz es dominante diagonalmente';
+        result = 'La matriz es dominante diagonalmente.';
       } else if (diagonal < sum) {
-        result = 'La matriz no es dominante diagonalmente. Reorganice filas o columnas para lograr esta condicion';
+        result = 'La matriz no es dominante diagonalmente. Reorganice filas o columnas para lograr esta condición.';
         canCalculate = false;
         break;
       }
