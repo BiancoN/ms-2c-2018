@@ -51,7 +51,7 @@ class App extends Component {
   onChange = event => {
     const { name, value } = event.target;
     const newState = _.set(this.state, name, value);
-    if (name.includes('a')) newState.results = {};
+    // if (name.includes('a')) newState.results = {};
     this.setState(newState);
   }
 
@@ -77,14 +77,16 @@ class App extends Component {
   }
 
   runJacobiAlgorithm = () => {
-    let { n, m, a, b, initialVector, results } = this.state;
+    let { n, m, a, b, initialVector, results, decimalAmount, errorDimension } = this.state;
     let sol = initialVector[0].slice();
-    let c, iteraciones, i, j, suma, soltem = [m];
+    let c, i, j, suma, soltem = [m], aux = [m];
+    var condition = true;
     // Add matrix b like a column in matrix a
     for (c = 0; c < n; c++) {
       a[c][m] = b[c][0]
     }
-    for (iteraciones = 0; iteraciones < 3; iteraciones++){
+   
+	  while(condition){
       for (i = 0; i < n; i++) {
           suma = 0;
           for (j = 0; j < m ; j++) {
@@ -92,9 +94,17 @@ class App extends Component {
             suma += a[i][j] * sol[j];
           }
           soltem[i] = (a[i][m] - suma) / a[i][i];
+		  aux[i] = soltem[i] -sol[i];
+      }
+      var normInf = Math.max(...aux.map(value => Math.abs(value)));
+      if(isNaN(normInf))
+        break;
+      console.log('Norma infinito:' + normInf);
+      if(normInf < errorDimension){ 
+        condition = false;
       }
       for (i = 0; i < n; i++){
-        sol[i] = soltem[i];
+        sol[i] = soltem[i].toFixed(decimalAmount);//Set decimals
       }
     }
     results.values = sol;
@@ -170,6 +180,7 @@ class App extends Component {
             results={results} x={x} initialVector={initialVector} method={method} decimalAmount={decimalAmount} errorDimension={errorDimension}
             resolveMatrix={this.resolveMatrix}
             onChangeInitialVector={this.onChangeInitialVector}
+            onChange={this.onChange}
             selectMethod={this.selectMethod}
           /> : null
         }

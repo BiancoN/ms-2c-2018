@@ -185,6 +185,14 @@ body {
   margin: 1em 1.5em 0 0;
 }
 
+.Algorithm input , .MatrixContainer{
+  margin: 0 1em;
+}
+
+.ErrorDimension input{
+  width: 8em;
+}
+
 .IsActive{
   background-color: #5cb85c;
   border-color: #4cae4c;
@@ -194,3 +202,4 @@ body {
 .AlignStart{
   align-self: start;
 }
+

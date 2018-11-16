@@ -3,8 +3,8 @@ import Table from '../components/Table';
 import Matrix from '../components/Matrix';
 import Input from '../components/Input';
 
-const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVector, onChangeInitialVector, decimalAmount, errorDimension }) => (
-  <div className="Step">
+const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVector, onChangeInitialVector, decimalAmount, errorDimension, onChange}) => (
+  <div className="Step Algorithm">
     <h3 className="TextCenter Underline">Método de resolución </h3>
     <span className="MarginVertical AlignStart">Seleccione el método de resolución a utilizar:</span>
     <div className="ButtonsContainer">
@@ -24,11 +24,11 @@ const Algorithm = ({ selectMethod, resolveMatrix, results, x, method, initialVec
         </div>
         <div className="MatrixesContainer">
           <span className="MarginVertical">Indique la cantidad de decimales:</span>
-          <Input name="decimalAmount"  values={decimalAmount} />
+          <Input name="decimalAmount" value={decimalAmount} onChange={onChange} />
         </div>
-        <div className="MatrixesContainer">
+        <div className="MatrixesContainer ErrorDimension">
           <span className="MarginVertical">Indique la cota de error:</span>
-          <Input name="errorDimension" values={errorDimension} /> 
+          <Input name="errorDimension" value={errorDimension} onChange={onChange} /> 
         </div>
 
         <div className="ButtonsContainer">
