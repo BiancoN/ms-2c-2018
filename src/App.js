@@ -161,7 +161,7 @@ class App extends Component {
         for(j = 0; j < m; j++){
           matrizNorma[k][j] = Math.abs(matrizRes[k][j] - matrizRes[k - 1][j]);    
         }
-        matrizNormaInf.push([Math.max.apply(null, matrizNorma[k])]);
+        matrizNormaInf.push([Math.max.apply(null, matrizNorma[k]).toFixed(decimalAmount)]);
     }while(Math.max.apply(null, matrizNorma[k]) >= errorDimension);
     results.values = matrizRes;
     results.errorValues = matrizNormaInf;
