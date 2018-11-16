@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       n: 1,
       m: 1,
-      initialVector: [[0]],
+      initialVector: [[]],
       a: [[0]],
       b: [[0]],
       x: [['X0']],
@@ -71,6 +71,9 @@ class App extends Component {
    if(method === 'jacobi'){
     this.runJacobiAlgorithm();
    }
+   if(method === 'gauss-seidel'){
+     this.runGaussSeiden();
+   }
   }
 
   runJacobiAlgorithm = () => {
@@ -95,6 +98,52 @@ class App extends Component {
       }
     }
     results.values = sol;
+    results.available = true;
+    const newState = _.set(this.state, 'results', results);
+    this.setState(newState); 
+    return;
+  }
+
+  runGaussSeiden = () => {
+    let { n, m, initialVector, a, b, x, method, errorDimension, decimalAmount, results } = this.state;
+    let k = 0;
+    let i;
+    let j;
+    let suma;
+    let matrizRes = [];
+    matrizRes.push(initialVector[0])
+    let vector = [];
+    for(j = 0; j < m; j++){
+        vector.push(0);
+    }
+    let matrizNorma = [];
+    matrizNorma.push(vector);
+    do{    
+        k++;
+        matrizRes.push(vector);
+        suma = 0;
+        for(i = 0; i < n; i++){    
+            for(j = 0; j < m; j++){        
+                if(j < i){
+                    suma += -(a[i][j] * parseInt(matrizRes[k][j], 10));
+                }
+                if( j > i){
+                    suma += -(a[i][j] * parseInt(matrizRes[k - 1][j], 10));
+                }
+            }
+            console.log("suma:", suma);
+            console.log("termino independiente:", parseInt(b[i], 10));
+            console.log("Coeficiente considerado:", a[i][i]); 
+            console.log("Valor a agregar:", (( suma + parseInt(b[i], 10) ) / a[i][i]));
+            matrizRes[k][i] = Math.round((( suma + parseInt(b[i], 10) ) / a[i][i]) + "e+" + decimalAmount) + "e-" + decimalAmount;
+        }
+        console.log(matrizRes[k]);
+        for(j = 0; j < m; j++){
+          matrizNorma.push(vector);
+          matrizNorma[k][j] = Math.abs(matrizRes[k][j] - matrizRes[k - 1][j]);    
+        }
+    }while(Math.max.apply(null, matrizNorma[k]) > errorDimension);
+    results.values = matrizRes;
     results.available = true;
     const newState = _.set(this.state, 'results', results);
     this.setState(newState); 
