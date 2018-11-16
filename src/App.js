@@ -115,44 +115,47 @@ class App extends Component {
   }
 
   runGaussSeiden = () => {
-    let { n, m, initialVector, a, b, x, method, errorDimension, decimalAmount, results } = this.state;
+    let { n, m, initialVector, a, b, errorDimension, decimalAmount, results } = this.state;
     let k = 0;
     let i;
     let j;
     let suma;
     let matrizRes = [];
-    matrizRes.push(initialVector[0])
+    matrizRes.push(initialVector[0].map(v => parseInt(v, 10)));
     let vector = [];
     for(j = 0; j < m; j++){
         vector.push(0);
     }
     let matrizNorma = [];
     matrizNorma.push(vector);
-    do{    
+    do{
         k++;
+        vector = [];
+        for(i = 0; i < n; i++){
+          vector.push(0);
+        }
         matrizRes.push(vector);
-        suma = 0;
-        for(i = 0; i < n; i++){    
+        for(i = 0; i < n; i++){
+          suma=0;  
             for(j = 0; j < m; j++){        
                 if(j < i){
-                    suma += -(a[i][j] * parseInt(matrizRes[k][j], 10));
+                  suma += -(a[i][j] * matrizRes[k][j]);
                 }
                 if( j > i){
-                    suma += -(a[i][j] * parseInt(matrizRes[k - 1][j], 10));
+                  suma += -(a[i][j] * matrizRes[k - 1][j]);
                 }
             }
-            console.log("suma:", suma);
-            console.log("termino independiente:", parseInt(b[i], 10));
-            console.log("Coeficiente considerado:", a[i][i]); 
-            console.log("Valor a agregar:", (( suma + parseInt(b[i], 10) ) / a[i][i]));
-            matrizRes[k][i] = Math.round((( suma + parseInt(b[i], 10) ) / a[i][i]) + "e+" + decimalAmount) + "e-" + decimalAmount;
+            matrizRes[k][i] = parseFloat((( suma + parseInt(b[i], 10)) / a[i][i]).toFixed(decimalAmount));
         }
-        console.log(matrizRes[k]);
+        vector = [];
         for(j = 0; j < m; j++){
-          matrizNorma.push(vector);
+          vector.push(0);
+        }
+        matrizNorma.push(vector);
+        for(j = 0; j < m; j++){
           matrizNorma[k][j] = Math.abs(matrizRes[k][j] - matrizRes[k - 1][j]);    
         }
-    }while(Math.max.apply(null, matrizNorma[k]) > errorDimension);
+    }while(Math.max.apply(null, matrizNorma[k]) >= errorDimension);
     results.values = matrizRes;
     results.available = true;
     const newState = _.set(this.state, 'results', results);
