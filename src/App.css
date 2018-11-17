@@ -211,3 +211,8 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.Small{
+  font-size: 12px;
+  text-decoration: italic;
+}

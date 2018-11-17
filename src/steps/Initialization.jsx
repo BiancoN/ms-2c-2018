@@ -5,7 +5,7 @@ import RefreshIcon from '../img/refresh.svg';
 
 const Initilization = ({ n, m, a, b, x, onChange, onBuildMatrix }) => (
   <div className="Step">
-    <h1>Bienvenido a SIEL</h1>
+    <h1 className="Box">Bienvenido a SIEL</h1>
     <span className="AlignStart MarginVertical">Ingrese las dimensiones de las matrices del sistema a resolver:</span>
     <div className="DimentionsContainer">
       <Input name="n" title="n = " value={n} onChange={onChange} />
@@ -24,7 +24,6 @@ const Initilization = ({ n, m, a, b, x, onChange, onBuildMatrix }) => (
       <p>=</p>
       <Matrix name="b" values={b} onChange={onChange} />
     </div>
-    <div className="SimpleLine" />
   </div>
 );
 
