@@ -53,7 +53,7 @@ class App extends Component {
   onChange = event => {
     const { name, value } = event.target;
     const newState = _.set(this.state, name, value);
-    // if (name.includes('a')) newState.results = {};
+    if (name.includes('a.')) newState.results = {};
     this.setState(newState);
   }
 

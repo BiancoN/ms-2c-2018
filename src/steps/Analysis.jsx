@@ -67,9 +67,8 @@ const analyzeMatrix = (a, onAnalyze) => {
   let result = 'La matriz es estrictamente dominante diagonalmente';
   let canCalculate = false;
   if (n !== m){
-    result = 'La matriz de coeficientes debe ser cuadrada';
-  }
-  else if(n === m) {
+    result = 'La matriz de coeficientes debe ser cuadrada';  
+  } else  {
     canCalculate = true;
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < m; j++) {
@@ -80,19 +79,20 @@ const analyzeMatrix = (a, onAnalyze) => {
         }
       }
     }
-  } else  {
-    for (let i = 0; i < n; i++) {
-      const { diagonal, sum } = a[i].reduce((accum, value, j) => {
-        if (i === j) accum.diagonal = Math.abs(value);
-        else accum.sum += Math.abs(value);
-        return accum;
-      }, { diagonal: 0, sum: 0 });
-      if (diagonal === sum) {
-        result = 'La matriz es dominante diagonalmente.';
-      } else if (diagonal < sum) {
-        result = 'La matriz no es dominante diagonalmente. Reorganice filas o columnas para lograr esta condición.';
-        canCalculate = false;
-        break;
+    if(canCalculate){
+      for (let i = 0; i < n; i++) {
+        const { diagonal, sum } = a[i].reduce((accum, value, j) => {
+          if (i === j) accum.diagonal = Math.abs(value);
+          else accum.sum += Math.abs(value);
+          return accum;
+        }, { diagonal: 0, sum: 0 });
+        if (diagonal === sum) {
+          result = 'La matriz es dominante diagonalmente. Reorganice (si es posible) filas o columnas para lograr esta condición.';
+        } else if (diagonal < sum) {
+          result = 'La matriz no es dominante diagonalmente. Reorganice (si es posible) filas o columnas para lograr esta condición.';
+          canCalculate = false;
+          break;
+        }
       }
     }
   }
@@ -103,7 +103,7 @@ const Analysis = ({ a, onAnalyze, message, norms }) => (
   <div className="Step">
     <span className="MarginVertical AlignStart">Para aplicar algun método es necesario que la matriz de coeficientes sea analizada.</span>
     <div className="AnalysisContainer">
-      <div className="ButtonContainer" onClick={() => analyzeMatrix(a, onAnalyze)}>
+      <div className="ButtonContainer MarginVertical" onClick={() => analyzeMatrix(a, onAnalyze)}>
         <p>Analizar</p>
       </div>
       <h4>{message}</h4>
